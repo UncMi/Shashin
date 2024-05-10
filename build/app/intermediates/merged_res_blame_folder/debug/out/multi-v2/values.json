@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.shashin.app-mergeDebugResources-9:/values/values.xml",
+            "outputFile": "com.example.shashin.app-mergeDebugResources-5:/values/values.xml",
             "map": [
                 {
                     "source": "C:\\Users\\nyanca\\.gradle\\caches\\transforms-3\\076eb9235982ee06112d76594ea8585f\\transformed\\jetified-window-1.0.0-beta04\\res\\values\\values.xml",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\flutterapps\\Shashin-Start\\shashin\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "source": "C:\\GithubRepositories\\Shashin\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
