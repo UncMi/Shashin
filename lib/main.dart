@@ -170,38 +170,40 @@ class _CameraRouteState extends State<CameraRoute> {
   }
 
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Stack(children: [
-
         Container(
           height: double.infinity,
           child: CameraPreview(_controller),
         ),
-
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
-          
           children: [
             Center(
               child: Container(
                 margin: EdgeInsets.all(20),
-                child:ElevatedButton(
-                      onPressed: (){}, 
-                      child: Icon(Icons.camera)
-                    
-                ), 
+                child: ElevatedButton(
+                    onPressed: () async {
+                      if (!_controller.value.isInitialized) {
+                        return null;
+                      }
+                      if (_controller.value.isTakingPicture) {
+                        return null;
+                      }
+                      try {
+                        await _controller.setFlashMode(FlashMode.auto);
+                        XFile picture = await _controller.takePicture();
+                      } on CameraException catch (e) {
+                        debugPrint("error while taking picture : $e");
+                      }
+                    },
+                    child: Icon(Icons.camera)),
               ),
             )
-            
-
           ],
-          )
-
+        )
       ]),
-     
-
     );
   }
 }
