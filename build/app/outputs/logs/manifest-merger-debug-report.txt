@@ -17,6 +17,8 @@ INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest
 INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml:1:1-33:12
 INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml:1:1-33:12
 MERGED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml:1:1-33:12
+MERGED from [:camera_android] C:\GithubRepositories\Shashin\build\camera_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-12:12
+MERGED from [:flutter_plugin_android_lifecycle] C:\GithubRepositories\Shashin\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\nyanca\.gradle\caches\transforms-3\99750bb863b6fe460a7b5da8686e778d\transformed\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:17:1-23:12
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\nyanca\.gradle\caches\transforms-3\076eb9235982ee06112d76594ea8585f\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\nyanca\.gradle\caches\transforms-3\bd3b08f2286d6f234db7d387c15cb207\transformed\fragment-1.1.0\AndroidManifest.xml:17:1-24:12
@@ -55,6 +57,10 @@ uses-sdk
 INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml
 INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml
+MERGED from [:camera_android] C:\GithubRepositories\Shashin\build\camera_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:camera_android] C:\GithubRepositories\Shashin\build\camera_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_plugin_android_lifecycle] C:\GithubRepositories\Shashin\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_plugin_android_lifecycle] C:\GithubRepositories\Shashin\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\nyanca\.gradle\caches\transforms-3\99750bb863b6fe460a7b5da8686e778d\transformed\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:19:5-21:41
 MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\nyanca\.gradle\caches\transforms-3\99750bb863b6fe460a7b5da8686e778d\transformed\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:19:5-21:41
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\nyanca\.gradle\caches\transforms-3\076eb9235982ee06112d76594ea8585f\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:20:5-22:41
@@ -101,6 +107,14 @@ uses-permission#android.permission.INTERNET
 ADDED from C:\GithubRepositories\Shashin\android\app\src\debug\AndroidManifest.xml:6:5-66
 	android:name
 		ADDED from C:\GithubRepositories\Shashin\android\app\src\debug\AndroidManifest.xml:6:22-64
+uses-permission#android.permission.CAMERA
+ADDED from [:camera_android] C:\GithubRepositories\Shashin\build\camera_android\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-65
+	android:name
+		ADDED from [:camera_android] C:\GithubRepositories\Shashin\build\camera_android\intermediates\merged_manifest\debug\AndroidManifest.xml:9:22-62
+uses-permission#android.permission.RECORD_AUDIO
+ADDED from [:camera_android] C:\GithubRepositories\Shashin\build\camera_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-71
+	android:name
+		ADDED from [:camera_android] C:\GithubRepositories\Shashin\build\camera_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:22-68
 uses-library#androidx.window.extensions
 ADDED from [androidx.window:window:1.0.0-beta04] C:\Users\nyanca\.gradle\caches\transforms-3\076eb9235982ee06112d76594ea8585f\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
 	android:required

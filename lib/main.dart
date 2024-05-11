@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 
-void main() {
+late List<CameraDescription> cameras;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  cameras = await availableCameras();
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -15,12 +19,12 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    //builds when reloaded
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -28,7 +32,7 @@ class HomeScreen extends StatelessWidget {
           title: const Text(
             "Shashin",
             style: TextStyle(
-              color: Colors.white, // Change this to the color you desire
+              color: Colors.white,
             ),
           ),
         ),
@@ -40,7 +44,7 @@ class HomeScreen extends StatelessWidget {
 
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0), // Add margin here
+              padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
                   print("Camera button pressed");
@@ -51,8 +55,7 @@ class HomeScreen extends StatelessWidget {
                       ));
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors
-                      .transparent, // Change button background color to black
+                  primary: Colors.transparent,
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                       Icons.camera,
                       color: Colors.white,
                       size: 72,
-                    ), // Icon with white color
+                    ),
                     //SizedBox(width: 8), // Add space between icon and text
                     // Text(
                     //   "Camera",
@@ -72,14 +75,13 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0), // Add margin here
+              padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
                   print("Another button pressed");
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors
-                      .transparent, // Change button background color to black
+                  primary: Colors.transparent,
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -103,33 +105,30 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               print("pressed!");
             }),
-        bottomNavigationBar: BottomNavigationBar(items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'coin gallery',
-          ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'coin gallery',
+            ),
           ],
           onTap: (int index) {
-            // Handle bottom navigation item press here
             switch (index) {
               case 0:
                 print("Home pressed");
                 Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => MyApp(),
-                      ));
-                // Add navigation logic for Home
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => HomeScreen(),
+                    ));
                 break;
               case 1:
                 print("Coin Gallery pressed");
-                // Add navigation logic for Coin Gallery
                 break;
-              // Add cases for additional items if needed
             }
           },
         ),
@@ -138,13 +137,71 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class CameraRoute extends StatelessWidget {
-  const CameraRoute({Key? key}) : super(key: key);
+class CameraRoute extends StatefulWidget {
+  const CameraRoute({super.key});
 
   @override
+  State<CameraRoute> createState() => _CameraRouteState();
+}
+
+class _CameraRouteState extends State<CameraRoute> {
+  late CameraController _controller;
+  @override
+  void initState() {
+    super.initState();
+    _controller = CameraController(cameras[0], ResolutionPreset.max);
+    _controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    }).catchError((Object e) {
+      if (e is CameraException) {
+        switch (e.code) {
+          case 'CameraAccessDenied':
+            print("access was denied");
+            break;
+          default:
+            print(e.description);
+            break;
+        }
+      }
+    });
+  }
+
   Widget build(BuildContext context) {
+
     return Scaffold(
-      appBar: AppBar(),
+      body: Stack(children: [
+
+        Container(
+          height: double.infinity,
+          child: CameraPreview(_controller),
+        ),
+
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          
+          children: [
+            Center(
+              child: Container(
+                margin: EdgeInsets.all(20),
+                child:ElevatedButton(
+                      onPressed: (){}, 
+                      child: Icon(Icons.camera)
+                    
+                ), 
+              ),
+            )
+            
+
+          ],
+          )
+
+      ]),
+     
+
     );
   }
 }

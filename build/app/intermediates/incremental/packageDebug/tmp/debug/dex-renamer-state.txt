@@ -1,4 +1,16 @@
-#Fri May 10 19:48:37 TRT 2024
-base.0=C\:\\GithubRepositories\\Shashin\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+#Sat May 11 20:33:32 TRT 2024
+base.0=C\:\\GithubRepositories\\Shashin\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.1=C\:\\GithubRepositories\\Shashin\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
+base.2=C\:\\GithubRepositories\\Shashin\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+base.3=C\:\\GithubRepositories\\Shashin\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\10\\classes.dex
+base.4=C\:\\GithubRepositories\\Shashin\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\1\\classes.dex
 path.0=classes.dex
+path.1=0/classes.dex
+path.2=0/classes.dex
+path.3=10/classes.dex
+path.4=1/classes.dex
 renamed.0=classes.dex
+renamed.1=classes2.dex
+renamed.2=classes3.dex
+renamed.3=classes4.dex
+renamed.4=classes5.dex
