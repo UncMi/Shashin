@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:shashin/screen.dart';
@@ -173,20 +175,21 @@ class _CameraRouteState extends State<CameraRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        Container(
-          height: double.infinity,
-          child: CameraPreview(_controller),
-        ),
+        CameraPreview(_controller),
+
         Center(
-          child: Container(
-            width: 300, // Adjust the width of the circle
-            height: 300, // Adjust the height of the circle
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.blue, width: 2), // Adjust the border color and width
+            child: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                child: CustomPaint(
+                  painter: CirclePainter(),
+                  child: Container(),
+                ),
+              ),
             ),
           ),
-        ),
+
+      
         Positioned(
               left: 16,
               top: 16,
@@ -236,3 +239,5 @@ class _CameraRouteState extends State<CameraRoute> {
     );
   }
 }
+
+
