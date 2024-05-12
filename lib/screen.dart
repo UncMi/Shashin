@@ -16,7 +16,14 @@ class _ImagePreviewState extends State<ImagePreview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Image Preview")),
+      appBar: AppBar(title: const Text(
+            "Image Preview",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ), 
+          backgroundColor: Color.fromARGB(255, 46, 53, 52),),
+      backgroundColor: Color.fromARGB(255, 76, 88, 87),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -24,81 +31,24 @@ class _ImagePreviewState extends State<ImagePreview> {
             child: Center(
               child: Stack(
                 children: [
-                  if (showCircularImage) ...[
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      child: CircularImageView(widget.file),
+                  ClipOval(
+                    child: Container(
+                      width: 0.7 * MediaQuery.of(context).size.width,
+                      height: 0.7 * MediaQuery.of(context).size.width,
+                      child: Image.file(
+                        File(widget.file.path),
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    Positioned(
-                      top: 0,
-                      left: MediaQuery.of(context).size.width * 0.35 + 16.0,
-                      child: ImageInfoText(),
-                    ),
-                  ] else ...[
-                    Image.file(
-                      File(widget.file.path),
-                      fit: BoxFit.cover,
-                    ),
-                  ],
+                  ),
+
                 ],
+                
               ),
             ),
           ),
-          SizedBox(height: 20.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(
-                      context); // Go back to the previous screen (camera view)
-                },
-                child: Text("Retake Photo"),
-              ),
-              SizedBox(width: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    showCircularImage = true;
-                  });
-                },
-                child: Text("Send to Server"),
-              ),
-            ],
-          ),
         ],
       ),
-    );
-  }
-}
-
-class CircularImageView extends StatelessWidget {
-  final XFile file;
-
-  CircularImageView(this.file);
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipOval(
-      child: Image.file(
-        File(file.path),
-        fit: BoxFit.cover,
-        width: MediaQuery.of(context).size.width * 0.35,
-        height: MediaQuery.of(context).size.width * 0.35,
-      ),
-    );
-  }
-}
-
-class ImageInfoText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-
-      ],
     );
   }
 }

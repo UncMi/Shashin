@@ -176,32 +176,28 @@ class _CameraRouteState extends State<CameraRoute> {
     return Scaffold(
       body: Stack(children: [
         CameraPreview(_controller),
-
         Center(
-            child: ClipRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                child: CustomPaint(
-                  painter: CirclePainter(),
-                  child: Container(),
-                ),
+          child: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+              child: CustomPaint(
+                painter: CirclePainter(),
+                child: Container(),
               ),
             ),
           ),
-
-      
+        ),
         Positioned(
-              left: 16,
-              top: 16,
-              child:  ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(
-                      context); // Go back to the previous screen (camera view)
-                },
-                child: Icon(Icons.arrow_back),
-                ),
-            ),
-        
+          left: 16,
+          top: 16,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pop(
+                  context); // Go back to the previous screen (camera view)
+            },
+            child: Icon(Icons.arrow_back),
+          ),
+        ),
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -218,7 +214,6 @@ class _CameraRouteState extends State<CameraRoute> {
                         return null;
                       }
 
-                  
                       try {
                         await _controller.setFlashMode(FlashMode.auto);
                         XFile file = await _controller.takePicture();
@@ -230,9 +225,9 @@ class _CameraRouteState extends State<CameraRoute> {
                         debugPrint("error while taking picture : $e");
                       }
                     },
-                    child: Icon(Icons.camera, size:48)),
+                    child: Icon(Icons.camera, size: 48)),
               ),
-            ),          
+            ),
           ],
         )
       ]),
@@ -241,9 +236,8 @@ class _CameraRouteState extends State<CameraRoute> {
 }
 
 class CirclePainter extends CustomPainter {
-  final double innerCircleRadius = 0.35; // half of the screen width
-  final double outerCircleRadius =
-      0.35; // slightly larger than the inner circle
+  final double innerCircleRadius = 0.35;
+  final double outerCircleRadius = 0.35;
 
   @override
   void paint(Canvas canvas, Size size) {
