@@ -240,4 +240,33 @@ class _CameraRouteState extends State<CameraRoute> {
   }
 }
 
+class CirclePainter extends CustomPainter {
+  final double innerCircleRadius = 0.35; // half of the screen width
+  final double outerCircleRadius =
+      0.35; // slightly larger than the inner circle
 
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint outerPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+
+    final Paint innerPaint = Paint()
+      ..color = Colors.transparent
+      ..blendMode = BlendMode.dstIn;
+
+    final Offset center = size.center(Offset.zero);
+
+    // Draw outer circle
+    canvas.drawCircle(center, outerCircleRadius * size.width, outerPaint);
+
+    // Draw inner unblurred circle
+    canvas.drawCircle(center, innerCircleRadius * size.width, innerPaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
