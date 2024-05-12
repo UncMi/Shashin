@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:shashin/screen.dart';
 
 late List<CameraDescription> cameras;
 
@@ -176,6 +177,17 @@ class _CameraRouteState extends State<CameraRoute> {
           height: double.infinity,
           child: CameraPreview(_controller),
         ),
+        Positioned(
+              left: 16,
+              top: 16,
+              child:  ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(
+                      context); // Go back to the previous screen (camera view)
+                },
+                child: Icon(Icons.arrow_back),
+                ),
+            ),
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -191,16 +203,22 @@ class _CameraRouteState extends State<CameraRoute> {
                       if (_controller.value.isTakingPicture) {
                         return null;
                       }
+
+                  
                       try {
                         await _controller.setFlashMode(FlashMode.auto);
-                        XFile picture = await _controller.takePicture();
+                        XFile file = await _controller.takePicture();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ImagePreview(file)));
                       } on CameraException catch (e) {
                         debugPrint("error while taking picture : $e");
                       }
                     },
-                    child: Icon(Icons.camera)),
+                    child: Icon(Icons.camera, size:48)),
               ),
-            )
+            ),          
           ],
         )
       ]),
