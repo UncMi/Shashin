@@ -177,6 +177,16 @@ class _CameraRouteState extends State<CameraRoute> {
           height: double.infinity,
           child: CameraPreview(_controller),
         ),
+        Center(
+          child: Container(
+            width: 300, // Adjust the width of the circle
+            height: 300, // Adjust the height of the circle
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.blue, width: 2), // Adjust the border color and width
+            ),
+          ),
+        ),
         Positioned(
               left: 16,
               top: 16,
@@ -188,6 +198,7 @@ class _CameraRouteState extends State<CameraRoute> {
                 child: Icon(Icons.arrow_back),
                 ),
             ),
+        
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
