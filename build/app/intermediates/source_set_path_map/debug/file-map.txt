@@ -6,7 +6,9 @@ com.example.shashin.app-rs-4 C:\GithubRepositories\Shashin\build\app\generated\r
 com.example.shashin.app-mergeDebugResources-5 C:\GithubRepositories\Shashin\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
 com.example.shashin.app-mergeDebugResources-6 C:\GithubRepositories\Shashin\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
 com.example.shashin.app-merged_res-7 C:\GithubRepositories\Shashin\build\app\intermediates\merged_res\debug
-com.example.shashin.app-jetified-annotation-experimental-1.1.0-8 C:\Users\nyanca\.gradle\caches\transforms-3\02315cc9f75263553d2042718fc375ee\transformed\jetified-annotation-experimental-1.1.0\res
-com.example.shashin.app-jetified-window-1.0.0-beta04-9 C:\Users\nyanca\.gradle\caches\transforms-3\076eb9235982ee06112d76594ea8585f\transformed\jetified-window-1.0.0-beta04\res
-com.example.shashin.app-jetified-window-java-1.0.0-beta04-10 C:\Users\nyanca\.gradle\caches\transforms-3\99750bb863b6fe460a7b5da8686e778d\transformed\jetified-window-java-1.0.0-beta04\res
-com.example.shashin.app-core-1.6.0-11 C:\Users\nyanca\.gradle\caches\transforms-3\d08c73bfb05384f2e52578171dbd141e\transformed\core-1.6.0\res
+com.example.shashin.app-packaged_res-8 C:\GithubRepositories\Shashin\build\camera_android\intermediates\packaged_res\debug
+com.example.shashin.app-packaged_res-9 C:\GithubRepositories\Shashin\build\flutter_plugin_android_lifecycle\intermediates\packaged_res\debug
+com.example.shashin.app-jetified-annotation-experimental-1.1.0-10 C:\Users\nyanca\.gradle\caches\transforms-3\02315cc9f75263553d2042718fc375ee\transformed\jetified-annotation-experimental-1.1.0\res
+com.example.shashin.app-jetified-window-1.0.0-beta04-11 C:\Users\nyanca\.gradle\caches\transforms-3\076eb9235982ee06112d76594ea8585f\transformed\jetified-window-1.0.0-beta04\res
+com.example.shashin.app-jetified-window-java-1.0.0-beta04-12 C:\Users\nyanca\.gradle\caches\transforms-3\99750bb863b6fe460a7b5da8686e778d\transformed\jetified-window-java-1.0.0-beta04\res
+com.example.shashin.app-core-1.6.0-13 C:\Users\nyanca\.gradle\caches\transforms-3\d08c73bfb05384f2e52578171dbd141e\transformed\core-1.6.0\res

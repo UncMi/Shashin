@@ -35,7 +35,7 @@ class _ImagePreviewState extends State<ImagePreview> {
             child: Center(
               child: Stack(
                 children: [
-                  if (widget.cameraState == 1) 
+                  if (widget.cameraState == 0) 
                   Column(
                     
                     children: [

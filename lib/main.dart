@@ -40,9 +40,8 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         backgroundColor: Color.fromARGB(255, 76, 88, 87),
-        body: Row(
+        body: Column(
           // on top of each other
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.end,
 
           children: [
@@ -61,18 +60,47 @@ class HomeScreen extends StatelessWidget {
                   primary: Colors.transparent,
                 ),
                 child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
                       Icons.camera,
                       color: Colors.white,
-                      size: 72,
+                      size: 48,
                     ),
-                    //SizedBox(width: 8), // Add space between icon and text
-                    // Text(
-                    //   "Camera",
-                    //   style: TextStyle(color: Colors.white), // Text with white color
-                    // ),
+                    SizedBox(width: 30), // Add space between icon and text
+                     Text(
+                       "Take Coin Photo",
+                      style: TextStyle(color: Colors.white), // Text with white color
+                     ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  print("Camera button pressed");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CameraRoute(),
+                      ));
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent,
+                ),
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.browse_gallery,
+                      color: Colors.white,
+                      size: 48,
+                    ),
+                    SizedBox(width: 30), // Add space between icon and text
+                     Text(
+                       "Take Photo From Gallery",
+                      style: TextStyle(color: Colors.white), // Text with white color
+                     ),
                   ],
                 ),
               ),
@@ -87,27 +115,49 @@ class HomeScreen extends StatelessWidget {
                   primary: Colors.transparent,
                 ),
                 child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.list,
                         color: Colors.white,
-                        size: 72), // Another Icon with white color
-                    //SizedBox(width: 8), // Add space between icon and text
-                    // Text(
-                    //   "Coin Database",
-                    //   style: TextStyle(color: Colors.white), // Text with white color
-                    // ),
+                        size: 48), // Another Icon with white color
+                    SizedBox(width: 30), // Add space between icon and text
+                     Text(
+                       "Check Coin Database",
+                      style: TextStyle(color: Colors.white), // Text with white color
+                     ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  print("Another button pressed");
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent,
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.history,
+                        color: Colors.white,
+                        size: 48), // Another Icon with white color
+                    SizedBox(width: 30), // Add space between icon and text
+                     Text(
+                       "Your Coin History",
+                      style: TextStyle(color: Colors.white), // Text with white color
+                     ),
                   ],
                 ),
               ),
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.photo_library),
-            onPressed: () {
-              print("pressed!");
-            }),
+        // floatingActionButton: FloatingActionButton(
+        //     child: Icon(Icons.photo_library),
+        //     onPressed: () {
+        //       print("pressed!");
+        //     }),
         bottomNavigationBar: BottomNavigationBar(
           items: const [
             BottomNavigationBarItem(
@@ -150,7 +200,6 @@ class CameraRoute extends StatefulWidget {
 class _CameraRouteState extends State<CameraRoute> {
   late CameraController _controller;
   int _cameraState = 0;
-
   @override
   void initState() {
     super.initState();
@@ -189,22 +238,21 @@ class _CameraRouteState extends State<CameraRoute> {
             ),
           ),
         ),
-        if(_cameraState == 0)
-          Positioned(
-            top: 120,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                'Front Face Of The Coin',
-                style: TextStyle(
-                  fontSize: 32.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+        Positioned(
+          top: 120,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: Text(
+              'Front Face Of The Coin',
+              style: TextStyle(
+                fontSize: 32.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
           ),
+        ),
         Positioned(
           left: 16,
           top: 16,
@@ -212,7 +260,6 @@ class _CameraRouteState extends State<CameraRoute> {
             onPressed: () {
               Navigator.pop(
                   context); // Go back to the previous screen (camera view)
-                  _cameraState = 0;
             },
             child: Icon(Icons.arrow_back),
           ),
@@ -239,8 +286,7 @@ class _CameraRouteState extends State<CameraRoute> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ImagePreview(file, _cameraState),));
-                                _cameraState = 1;
+                                builder: (context) => ImagePreview(file, _cameraState)));
                       } on CameraException catch (e) {
                         debugPrint("error while taking picture : $e");
                       }
