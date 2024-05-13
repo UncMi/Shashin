@@ -2,9 +2,12 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
+import 'package:shashin/main.dart';
+
 class ImagePreview extends StatefulWidget {
-  ImagePreview(this.file, {Key? key});
+  ImagePreview(this.file, this.cameraState, {Key? key}) : super(key: key);
   final XFile file;
+  final int cameraState;
 
   @override
   State<ImagePreview> createState() => _ImagePreviewState();
@@ -14,6 +17,7 @@ class _ImagePreviewState extends State<ImagePreview> {
   bool showCircularImage = false;
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text(
@@ -31,7 +35,28 @@ class _ImagePreviewState extends State<ImagePreview> {
             child: Center(
               child: Stack(
                 children: [
-                  ClipOval(
+                  if (widget.cameraState == 1) 
+                  Column(
+                    
+                    children: [
+                    SizedBox(height: 40),
+                    Positioned(
+                      top: 120,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: Text(
+                          'Front Face Of The Coin',
+                          style: TextStyle(
+                            fontSize: 32.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                     SizedBox(height: 20),
+                    ClipOval(
                     child: Container(
                       width: 0.7 * MediaQuery.of(context).size.width,
                       height: 0.7 * MediaQuery.of(context).size.width,
@@ -41,9 +66,82 @@ class _ImagePreviewState extends State<ImagePreview> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 40),
+                  Padding(
+                    padding: EdgeInsets.only(left: 40),
+                    child: Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          print("Camera button pressed");
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (_) => CameraRoute(),
+                          //     ));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.transparent,
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.camera,
+                              color: Colors.white,
+                              size: 36,
+                            ),
+                            SizedBox(width: 8), 
+                             Text(
+                               "Retake",
+                               style: TextStyle(color: Colors.white),
+                                // Text with white color
+                             ),
+                          ],
+                        ),
+                      ),
 
-                ],
-                
+                      SizedBox(width:40),
+
+                      ElevatedButton(
+                        onPressed: () {
+                          print("Camera button pressed");
+                           Navigator.push(
+                               context,
+                               MaterialPageRoute(
+                                 builder: (_) => CameraRoute(),
+                             ));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.transparent,
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.camera,
+                              color: Colors.white,
+                              size: 36,
+                            ),
+                            SizedBox(width: 0), // Add space between icon and text
+                             Text(
+                               "Proceed",
+                               style: TextStyle(color: Colors.white),
+                                // Text with white color
+                             ),
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  )
+                  
+                  
+                  )
+                  
+                  ],)
+                  
+                ],             
               ),
             ),
           ),

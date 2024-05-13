@@ -149,6 +149,8 @@ class CameraRoute extends StatefulWidget {
 
 class _CameraRouteState extends State<CameraRoute> {
   late CameraController _controller;
+  int _cameraState = 0;
+
   @override
   void initState() {
     super.initState();
@@ -187,6 +189,22 @@ class _CameraRouteState extends State<CameraRoute> {
             ),
           ),
         ),
+        if(_cameraState == 0)
+          Positioned(
+            top: 120,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                'Front Face Of The Coin',
+                style: TextStyle(
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
         Positioned(
           left: 16,
           top: 16,
@@ -194,6 +212,7 @@ class _CameraRouteState extends State<CameraRoute> {
             onPressed: () {
               Navigator.pop(
                   context); // Go back to the previous screen (camera view)
+                  _cameraState = 0;
             },
             child: Icon(Icons.arrow_back),
           ),
@@ -220,7 +239,8 @@ class _CameraRouteState extends State<CameraRoute> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ImagePreview(file)));
+                                builder: (context) => ImagePreview(file, _cameraState),));
+                                _cameraState = 1;
                       } on CameraException catch (e) {
                         debugPrint("error while taking picture : $e");
                       }
