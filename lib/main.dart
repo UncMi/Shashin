@@ -67,10 +67,11 @@ class HomeScreen extends StatelessWidget {
                       size: 48,
                     ),
                     SizedBox(width: 30), // Add space between icon and text
-                     Text(
-                       "Take Coin Photo",
-                      style: TextStyle(color: Colors.white), // Text with white color
-                     ),
+                    Text(
+                      "Take Coin Photo",
+                      style: TextStyle(
+                          color: Colors.white), // Text with white color
+                    ),
                   ],
                 ),
               ),
@@ -97,10 +98,11 @@ class HomeScreen extends StatelessWidget {
                       size: 48,
                     ),
                     SizedBox(width: 30), // Add space between icon and text
-                     Text(
-                       "Take Photo From Gallery",
-                      style: TextStyle(color: Colors.white), // Text with white color
-                     ),
+                    Text(
+                      "Take Photo From Gallery",
+                      style: TextStyle(
+                          color: Colors.white), // Text with white color
+                    ),
                   ],
                 ),
               ),
@@ -120,10 +122,11 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.white,
                         size: 48), // Another Icon with white color
                     SizedBox(width: 30), // Add space between icon and text
-                     Text(
-                       "Check Coin Database",
-                      style: TextStyle(color: Colors.white), // Text with white color
-                     ),
+                    Text(
+                      "Check Coin Database",
+                      style: TextStyle(
+                          color: Colors.white), // Text with white color
+                    ),
                   ],
                 ),
               ),
@@ -143,10 +146,11 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.white,
                         size: 48), // Another Icon with white color
                     SizedBox(width: 30), // Add space between icon and text
-                     Text(
-                       "Your Coin History",
-                      style: TextStyle(color: Colors.white), // Text with white color
-                     ),
+                    Text(
+                      "Your Coin History",
+                      style: TextStyle(
+                          color: Colors.white), // Text with white color
+                    ),
                   ],
                 ),
               ),
@@ -199,7 +203,6 @@ class CameraRoute extends StatefulWidget {
 
 class _CameraRouteState extends State<CameraRoute> {
   late CameraController _controller;
-  int _cameraState = 0;
   @override
   void initState() {
     super.initState();
@@ -244,7 +247,7 @@ class _CameraRouteState extends State<CameraRoute> {
           right: 0,
           child: Center(
             child: Text(
-              'Front Face Of The Coin',
+              'Back Face Of The Coin',
               style: TextStyle(
                 fontSize: 32.0,
                 fontWeight: FontWeight.bold,
@@ -283,10 +286,10 @@ class _CameraRouteState extends State<CameraRoute> {
                       try {
                         await _controller.setFlashMode(FlashMode.auto);
                         XFile file = await _controller.takePicture();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ImagePreview(file, _cameraState)));
+                        print("AAAAAAAAAAAAAAA");
+                        int result = await _navigateToNextScreen(
+                        context, "ImagePreview", file);
+                        print(result);
                       } on CameraException catch (e) {
                         debugPrint("error while taking picture : $e");
                       }
@@ -299,6 +302,30 @@ class _CameraRouteState extends State<CameraRoute> {
       ]),
     );
   }
+}
+
+_navigateToNextScreen(
+  BuildContext context,
+  String routeIdentifier,
+  XFile file,
+) async {
+  int result = -1;
+  switch (routeIdentifier) {
+    case RouteIdentifiers.ImagePreviewRoute:
+      result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ImagePreview(file),
+        ),
+      );
+      break;
+  }
+  return result;
+}
+
+class RouteIdentifiers {
+  static const String ImagePreviewRoute = 'ImagePreview';
+  static const String routeB = 'RouteB';
 }
 
 class CirclePainter extends CustomPainter {

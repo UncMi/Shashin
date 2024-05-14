@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shashin/main.dart';
 
 class ImagePreview extends StatefulWidget {
-  ImagePreview(this.file, this.cameraState, {Key? key}) : super(key: key);
+  ImagePreview(this.file, {Key? key}) : super(key: key);
   final XFile file;
-  final int cameraState;
 
   @override
   State<ImagePreview> createState() => _ImagePreviewState();
@@ -35,9 +34,7 @@ class _ImagePreviewState extends State<ImagePreview> {
             child: Center(
               child: Stack(
                 children: [
-                  if (widget.cameraState == 0) 
                   Column(
-                    
                     children: [
                     SizedBox(height: 40),
                     Positioned(
@@ -106,11 +103,10 @@ class _ImagePreviewState extends State<ImagePreview> {
                       ElevatedButton(
                         onPressed: () {
                           print("Camera button pressed");
-                           Navigator.push(
+                           Navigator.pop(
                                context,
-                               MaterialPageRoute(
-                                 builder: (_) => CameraRoute(),
-                             ));
+                               1
+                               );
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.transparent,
