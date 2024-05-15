@@ -6,6 +6,17 @@ import 'package:shashin/screen.dart';
 
 late List<CameraDescription> cameras;
 
+class SharedData {
+  static int _cameraState = 0;
+
+  static int get cameraState => _cameraState;
+
+  static set cameraState(int newState) {
+    _cameraState = newState;
+  }
+}
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
@@ -25,7 +36,6 @@ class MyApp extends StatelessWidget {
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,6 +49,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
+        
         backgroundColor: Color.fromARGB(255, 76, 88, 87),
         body: Column(
           // on top of each other
@@ -194,6 +205,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+
 class CameraRoute extends StatefulWidget {
   const CameraRoute({super.key});
 
@@ -203,6 +215,7 @@ class CameraRoute extends StatefulWidget {
 
 class _CameraRouteState extends State<CameraRoute> {
   late CameraController _controller;
+
   @override
   void initState() {
     super.initState();
@@ -241,30 +254,48 @@ class _CameraRouteState extends State<CameraRoute> {
             ),
           ),
         ),
-        Positioned(
-          top: 120,
-          left: 0,
-          right: 0,
-          child: Center(
-            child: Text(
-              'Back Face Of The Coin',
-              style: TextStyle(
-                fontSize: 32.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+        if ( SharedData._cameraState == 0)
+          Positioned(
+            top: 120,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                'Front Face Of The Coin',
+                style: TextStyle(
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
-        ),
+        if (SharedData._cameraState == 1)
+          Positioned(
+            top: 120,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                'Back Face Of The Coin',
+                style: TextStyle(
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
         Positioned(
           left: 16,
           top: 16,
           child: ElevatedButton(
             onPressed: () {
-              Navigator.pop(
-                  context); // Go back to the previous screen (camera view)
+              Navigator.pop(context);
+              SharedData._cameraState = 0;
             },
             child: Icon(Icons.arrow_back),
+            
           ),
         ),
         Column(
@@ -287,9 +318,16 @@ class _CameraRouteState extends State<CameraRoute> {
                         await _controller.setFlashMode(FlashMode.auto);
                         XFile file = await _controller.takePicture();
                         print("AAAAAAAAAAAAAAA");
-                        int result = await _navigateToNextScreen(
-                        context, "ImagePreview", file);
-                        print(result);
+                        SharedData._cameraState = await _navigateToNextScreen(
+                            context, "ImagePreview", file);
+                        Navigator.pop(
+                          context,
+                        );
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => CameraRoute(),
+                            ));
                       } on CameraException catch (e) {
                         debugPrint("error while taking picture : $e");
                       }
