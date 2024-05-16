@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:shashin/screen.dart';
 
+
+class SharedPhoto {
+  static XFile photo1 = XFile('assets/placeholder.png');
+  static XFile photo2 = XFile('assets/placeholder.png');
+}
+
 late List<CameraDescription> cameras;
 
 class SharedData {

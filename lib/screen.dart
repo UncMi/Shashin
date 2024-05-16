@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shashin/main.dart';
+import 'package:shashin/zinfoscreen.dart';
 
 class ImagePreview extends StatefulWidget {
   ImagePreview(this.file, {Key? key}) : super(key: key);
@@ -83,73 +84,78 @@ class _ImagePreviewState extends State<ImagePreview> {
                       ),
                       SizedBox(height: 40),
                       Padding(
-                          padding: EdgeInsets.only(left: 40),
-                          child: Row(
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  print("Camera button pressed");
-                                  if (SharedData.cameraState == 0)
-                                    Navigator.pop(context, 0);
-                                  if (SharedData.cameraState == 1)
-                                    Navigator.pop(context, 1);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.transparent,
-                                ),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.camera,
-                                      color: Colors.white,
-                                      size: 36,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      "Retake",
-                                      style: TextStyle(color: Colors.white),
-                                      // Text with white color
-                                    ),
-                                  ],
-                                ),
+                        padding: EdgeInsets.only(left: 40),
+                        child: Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                print("Camera button pressed");
+                                if (SharedData.cameraState == 0) {
+                                  Navigator.pop(context, 0);
+                                } else if (SharedData.cameraState == 1) {
+                                  Navigator.pop(context, 1);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.transparent,
                               ),
-                              SizedBox(width: 40),
-                              ElevatedButton(
-                                onPressed: () {
-                                  print("Camera button pressed");
-                                  if (SharedData.cameraState == 0)
-                                    Navigator.pop(context, 1);
-                                  if (SharedData.cameraState == 1)
-                                    //SHARE WITH SERVER
-                                    print("Sharing data with the server...");
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.transparent,
-                                ),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.camera,
-                                      color: Colors.white,
-                                      size: 36,
-                                    ),
-                                    SizedBox(
-                                        width:
-                                            0), // Add space between icon and text
-                                    Text(
-                                      "Proceed",
-                                      style: TextStyle(color: Colors.white),
-                                      // Text with white color
-                                    ),
-                                  ],
-                                ),
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.camera,
+                                    color: Colors.white,
+                                    size: 36,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "Retake",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ))
+                            ),
+                            SizedBox(width: 40),
+                            ElevatedButton(
+                              onPressed: () {
+                                print("Camera button pressed");
+                                if (SharedData.cameraState == 0) {
+                                  SharedPhoto.photo1 = widget.file;
+                                  Navigator.pop(context, 1);
+                                } else if (SharedData.cameraState == 1) {
+                                  SharedPhoto.photo2 = widget.file;
+                                   Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => InfoRoute(),
+                                    ));
+                                  print("Sharing data with the server...");
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.transparent,
+                              ),
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.camera,
+                                    color: Colors.white,
+                                    size: 36,
+                                  ),
+                                  SizedBox(width: 0),
+                                  Text(
+                                    "Proceed",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
