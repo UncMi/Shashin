@@ -1,12 +1,13 @@
-from flask import Flask, request, jsonify, send_from_directory
 import os
-import numpy as np
 import json
 import asyncio
 from aiohttp import ClientSession
 from PIL import Image
 import requests
 from io import BytesIO
+from flask import Flask, request, jsonify, send_from_directory
+import numpy as np
+import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 
@@ -23,6 +24,15 @@ async def send_to_model(image_np):
         async with session.post('https://coin-model-7ynk.onrender.com/v1/models/coin_model:predict', data=data, headers=headers) as response:
             return await response.json()
 
+def get_next_index():
+    existing_files = [f for f in os.listdir(UPLOAD_FOLDER) if os.path.isfile(os.path.join(UPLOAD_FOLDER, f))]
+    existing_images = [f for f in existing_files if f.startswith('image_') and f.endswith('.jpg')]
+    if existing_images:
+        indexes = [int(img.split('_')[1]) for img in existing_images]
+        return max(indexes) + 1
+    else:
+        return 1
+
 @app.route('/upload', methods=['POST'])
 async def upload_file():
     if 'file' not in request.files:
@@ -31,35 +41,54 @@ async def upload_file():
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
     if file:
-        filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+        next_index = get_next_index()
+        filename = f'image_{next_index}_1.jpg'
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
 
-        # Notify about the image received
-        print(f"Image received: {file.filename}")
-        
-        # Process the image and send to model
+        print(f"Image received: {filename}")
+
         img_height, img_width = 256, 256
         image = Image.open(filepath)
-        image = image.crop((0, 450, image.width, image.height - 450))
 
-        # Cut top and bottom 450 pixels
-        
+        rotated_image = image.rotate(-90, expand=True)
+        rotated_filename = 'rotated_' + filename
+        rotated_filepath = os.path.join(UPLOAD_FOLDER, rotated_filename)
+        rotated_image.save(rotated_filepath)
 
-        resized_image = image.resize((img_width, img_height))
+        # Crop the rotated image to maintain a square shape
+        min_dimension = min(rotated_image.width, rotated_image.height)
+        left = (rotated_image.width - min_dimension) / 2
+        top = (rotated_image.height - min_dimension) / 2
+        right = left + min_dimension
+        bottom = top + min_dimension
+        cropped_rotated_image = rotated_image.crop((left, top, right, bottom))
+
+        # Save the cropped rotated image
+        cropped_rotated_filename = 'cropped_rotated_' + filename
+        cropped_rotated_filepath = os.path.join(UPLOAD_FOLDER, cropped_rotated_filename)
+        cropped_rotated_image.save(cropped_rotated_filepath)
+
+        # Resize the cropped rotated image to have the desired dimensions (1:1 aspect ratio)
+        resized_image = cropped_rotated_image.resize((img_width, img_width))
         image_np = np.array(resized_image)
-        image_np = image_np.reshape((1, img_height, img_width, 3))
+        image_np = image_np.reshape((1, img_width, img_width, 3))
+
+       # Save the NumPy array
+        np.save(os.path.join(UPLOAD_FOLDER, f"image_np_{next_index}.npy"), image_np)
+
+        loaded_image_np = np.load(os.path.join(UPLOAD_FOLDER, "image_np_13.npy"))
 
         predictions = await send_to_model(image_np)
         predicted_class = class_names[np.argmax(predictions['predictions'][0])]
-        
-        # Fetch additional coin info
+
         key = predicted_class[:-1]
         coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info/{key}").json()
         print(coin_info)
 
         return jsonify({
             "message": "File uploaded successfully",
-            "filename": file.filename,
+            "filename": cropped_rotated_filename,
             "predicted_class": predicted_class,
             "coin_info": coin_info
         }), 200
