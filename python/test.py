@@ -5,6 +5,8 @@ import json
 import asyncio
 from aiohttp import ClientSession
 from PIL import Image
+import requests
+from io import BytesIO
 
 app = Flask(__name__)
 
@@ -34,18 +36,33 @@ async def upload_file():
 
         # Notify about the image received
         print(f"Image received: {file.filename}")
-
+        
         # Process the image and send to model
         img_height, img_width = 256, 256
         image = Image.open(filepath)
+        image = image.crop((0, 450, image.width, image.height - 450))
+
+        # Cut top and bottom 450 pixels
+        
+
         resized_image = image.resize((img_width, img_height))
         image_np = np.array(resized_image)
         image_np = image_np.reshape((1, img_height, img_width, 3))
 
         predictions = await send_to_model(image_np)
         predicted_class = class_names[np.argmax(predictions['predictions'][0])]
+        
+        # Fetch additional coin info
+        key = predicted_class[:-1]
+        coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info/{key}").json()
+        print(coin_info)
 
-        return jsonify({"message": "File uploaded successfully", "filename": file.filename, "predicted_class": predicted_class}), 200
+        return jsonify({
+            "message": "File uploaded successfully",
+            "filename": file.filename,
+            "predicted_class": predicted_class,
+            "coin_info": coin_info
+        }), 200
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):

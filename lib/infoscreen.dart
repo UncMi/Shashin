@@ -1,12 +1,15 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:shashin/main.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:shashin/main.dart';
+import 'package:shashin/lastscreen.dart';
 
 class InfoRoute extends StatefulWidget {
-  const InfoRoute({super.key});
+  const InfoRoute({Key? key}) : super(key: key);
 
   @override
   State<InfoRoute> createState() => InfoRouteState();
@@ -27,8 +30,15 @@ Future<void> uploadImage(File imageFile, BuildContext context) async {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Image uploaded successfully'),
-          duration: Duration(seconds: 2),
+          content: const Text('Image uploaded successfully'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+
+      // Pass the additional coin info to the next screen or handle it appropriately
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => CoinInfoScreen(data: data),
         ),
       );
     } else {
@@ -38,15 +48,20 @@ Future<void> uploadImage(File imageFile, BuildContext context) async {
     print('Request timed out: $e');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Upload timed out. Please try again.'),
-        duration: Duration(seconds: 2),
+        content: const Text('Upload timed out. Please try again.'),
+        duration: const Duration(seconds: 2),
       ),
     );
   } catch (e) {
     print('Upload failed: $e');
   }
 }
+
+bool isLoading = false;
+
 class InfoRouteState extends State<InfoRoute> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,102 +72,299 @@ class InfoRouteState extends State<InfoRoute> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 46, 53, 52),
+        backgroundColor: const Color.fromARGB(255, 46, 53, 52),
       ),
-      backgroundColor: Color.fromARGB(255, 76, 88, 87),
+      backgroundColor: const Color.fromARGB(255, 76, 88, 87),
       body: Column(
-        
-          children: [
-
-            SizedBox(height: 20),
-            Row(children: [
-              SizedBox(width:40),
+        children: [
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              const SizedBox(width: 40),
               ClipOval(
-              child: Container(
-                width: 0.35 * MediaQuery.of(context).size.width,
-                height: 0.35 * MediaQuery.of(context).size.width,
-                child: Image.file(
-                  File(SharedPhoto.photo1.path),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            SizedBox(width:20),
-            ClipOval(
-              child: Container(
-                width: 0.35 * MediaQuery.of(context).size.width,
-                height: 0.35 * MediaQuery.of(context).size.width,
-                child: Image.file(
-                  File(SharedPhoto.photo2.path),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-
-
-            ],),
-            
-            const SizedBox(height: 60),
-
-            Row(
-              children: [
-                SizedBox(width: 40),
-                ElevatedButton(
-                  onPressed: () {
-                    print("Camera button pressed");
-                    SharedData.cameraState = 0;
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.transparent,
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.camera,
-                        color: Colors.white,
-                        size: 36,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        "Discard",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
+                child: Container(
+                  width: 0.35 * MediaQuery.of(context).size.width,
+                  height: 0.35 * MediaQuery.of(context).size.width,
+                  child: Image.file(
+                    File(SharedPhoto.photo1.path),
+                    fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    print("Camera button pressed");
+              ),
+              const SizedBox(width: 20),
+              ClipOval(
+                child: Container(
+                  width: 0.35 * MediaQuery.of(context).size.width,
+                  height: 0.35 * MediaQuery.of(context).size.width,
+                  child: Image.file(
+                    File(SharedPhoto.photo2.path),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 60),
+          Row(
+            children: [
+              const SizedBox(width: 40),
+              ElevatedButton(
+                onPressed: () {
+                  print("Camera button pressed");
+                  SharedData.cameraState = 0;
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent,
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.camera,
+                      color: Colors.white,
+                      size: 36,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "Discard",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  print("Camera button pressed");
+                  setState(() {
+                    isLoading =
+                        true; // Set isLoading to true when starting upload
+                  });
+                  try {
                     await uploadImage(File(SharedPhoto.photo1.path), context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.transparent,
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  } finally {
+                    setState(() {
+                      isLoading =
+                          false; // Reset isLoading after upload finishes
+                    });
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.camera,
+                      color: Colors.white,
+                      size: 36,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "Continue",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (isLoading)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child:
+                  CircularProgressIndicator(), // Display progress indicator while isLoading is true
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class CoinInfoScreen extends StatefulWidget {
+  final Map<String, dynamic> data;
+
+  const CoinInfoScreen({Key? key, required this.data}) : super(key: key);
+
+  @override
+  State<CoinInfoScreen> createState() => _CoinInfoScreenState();
+}
+
+class _CoinInfoScreenState extends State<CoinInfoScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Simulating loading delay
+    Timer(const Duration(seconds: 2), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final coinInfo = widget.data['coin_info'];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Image Preview",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 46, 53, 52),
+      ),
+      backgroundColor: const Color.fromARGB(255, 76, 88, 87),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
                     children: [
-                      Icon(
-                        Icons.camera,
-                        color: Colors.white,
-                        size: 36,
+                      const SizedBox(height: 40),
+                      const Text(
+                        'Coin info',
+                        style: TextStyle(
+                          fontSize: 32.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
-                      SizedBox(width: 8),
-                      Text(
-                        "Continue",
-                        style: TextStyle(color: Colors.white),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipOval(
+                            child: Container(
+                              width: 0.35 * MediaQuery.of(context).size.width,
+                              height: 0.35 * MediaQuery.of(context).size.width,
+                              child: Image.file(
+                                File(SharedPhoto.photo1.path),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 40),
+                          ClipOval(
+                            child: Container(
+                              width: 0.35 * MediaQuery.of(context).size.width,
+                              height: 0.35 * MediaQuery.of(context).size.width,
+                              child: Image.file(
+                                File(SharedPhoto.photo2.path),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      if (coinInfo != null) ...[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(width: 40),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Number: ${coinInfo['Number'] ?? 'N/A'}',
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Period: ${coinInfo['Period'] ?? 'N/A'}',
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Denomination: ${coinInfo['Denomination'] ?? 'N/A'}',
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Year: ${coinInfo['Year'] ?? 'N/A'}',
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Coin type: ${coinInfo['Coin type'] ?? 'N/A'}',
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                // Add other fields as needed
+                              ],
+                            ),
+                          ],
+                        ),
+                      ] else
+                        const Text(
+                          'No coin info available.',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      const SizedBox(height: 40),
+                      ElevatedButton(
+                        onPressed: () {
+                          SharedData.cameraState = 0;
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.transparent,
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.camera,
+                              color: Colors.white,
+                              size: 36,
+                            ),
+                            const SizedBox(
+                                width: 8), // Add space between icon and text
+                            Text(
+                              "Return To Main Page",
+                              style: TextStyle(color: Colors.white),
+                              // Text with white color
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              
               ],
-            )
-            
-          ],
-        ),
+            ),
     );
   }
 }
