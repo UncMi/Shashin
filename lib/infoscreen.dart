@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shashin/main.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:async';
 
 class InfoRoute extends StatefulWidget {
   const InfoRoute({super.key});
@@ -9,6 +12,40 @@ class InfoRoute extends StatefulWidget {
   State<InfoRoute> createState() => InfoRouteState();
 }
 
+Future<void> uploadImage(File imageFile, BuildContext context) async {
+  final url = Uri.parse('http://192.168.1.160:5000/upload');
+  final request = http.MultipartRequest('POST', url);
+  request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+
+  try {
+    final response = await request.send().timeout(const Duration(seconds: 180));
+
+    if (response.statusCode == 200) {
+      final responseData = await http.Response.fromStream(response);
+      final data = json.decode(responseData.body);
+      print('Upload successful: $data');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Image uploaded successfully'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else {
+      print('Upload failed with status: ${response.statusCode}');
+    }
+  } on TimeoutException catch (e) {
+    print('Request timed out: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Upload timed out. Please try again.'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  } catch (e) {
+    print('Upload failed: $e');
+  }
+}
 class InfoRouteState extends State<InfoRoute> {
   @override
   Widget build(BuildContext context) {
@@ -87,8 +124,9 @@ class InfoRouteState extends State<InfoRoute> {
                 ),
                 SizedBox(width: 20),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     print("Camera button pressed");
+                    await uploadImage(File(SharedPhoto.photo1.path), context);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.transparent,

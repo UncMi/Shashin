@@ -110,6 +110,18 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "http",
+      "rootUri": "file:///C:/Users/nyanca/AppData/Local/Pub/Cache/hosted/pub.dev/http-0.13.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "http_parser",
+      "rootUri": "file:///C:/Users/nyanca/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "lints",
       "rootUri": "file:///C:/Users/nyanca/AppData/Local/Pub/Cache/hosted/pub.dev/lints-2.1.1",
       "packageUri": "lib/",
@@ -194,6 +206,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "typed_data",
+      "rootUri": "file:///C:/Users/nyanca/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///C:/Users/nyanca/AppData/Local/Pub/Cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
@@ -212,7 +230,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-05-14T13:07:57.461012Z",
+  "generated": "2024-05-18T12:40:27.565958Z",
   "generator": "pub",
   "generatorVersion": "3.2.2"
 }

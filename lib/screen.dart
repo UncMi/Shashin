@@ -3,7 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shashin/main.dart';
-import 'package:shashin/zinfoscreen.dart';
+import 'package:shashin/infoscreen.dart';
 
 class ImagePreview extends StatefulWidget {
   ImagePreview(this.file, {Key? key}) : super(key: key);
@@ -129,7 +129,6 @@ class _ImagePreviewState extends State<ImagePreview> {
                                     MaterialPageRoute(
                                       builder: (_) => InfoRoute(),
                                     ));
-                                  print("Sharing data with the server...");
                                 }
                               },
                               style: ElevatedButton.styleFrom(
