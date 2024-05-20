@@ -76,9 +76,12 @@ class _ImagePreviewState extends State<ImagePreview> {
                         child: Container(
                           width: 0.7 * MediaQuery.of(context).size.width,
                           height: 0.7 * MediaQuery.of(context).size.width,
-                          child: Image.file(
-                            File(widget.file.path),
-                            fit: BoxFit.cover,
+                          child: Transform.translate(
+                            offset: Offset(0, 0),  
+                            child: Image.file(
+                              File(widget.file.path),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),

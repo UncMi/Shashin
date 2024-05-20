@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:shashin/main.dart';
-import 'package:shashin/lastscreen.dart';
+
 
 class InfoRoute extends StatefulWidget {
   const InfoRoute({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class InfoRoute extends StatefulWidget {
 }
 
 Future<void> uploadImage(File imageFile, BuildContext context) async {
-  final url = Uri.parse('http://192.168.1.160:5000/upload');
+  final url = Uri.parse('http://10.0.0.123:5000/upload');
   final request = http.MultipartRequest('POST', url);
   request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
 
@@ -35,7 +35,6 @@ Future<void> uploadImage(File imageFile, BuildContext context) async {
         ),
       );
 
-      // Pass the additional coin info to the next screen or handle it appropriately
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => CoinInfoScreen(data: data),
@@ -43,6 +42,12 @@ Future<void> uploadImage(File imageFile, BuildContext context) async {
       );
     } else {
       print('Upload failed with status: ${response.statusCode}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Upload failed with status: ${response.statusCode}'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     }
   } on TimeoutException catch (e) {
     print('Request timed out: $e');
@@ -54,8 +59,15 @@ Future<void> uploadImage(File imageFile, BuildContext context) async {
     );
   } catch (e) {
     print('Upload failed: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Upload failed: $e'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 }
+
 
 bool isLoading = false;
 

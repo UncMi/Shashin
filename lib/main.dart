@@ -387,7 +387,7 @@ class CirclePainter extends CustomPainter {
       ..color = Colors.transparent
       ..blendMode = BlendMode.dstIn;
 
-    final Offset center = size.center(Offset.zero);
+    final Offset center = Offset(size.width / 2, size.height * 0.42);
 
     // Draw outer circle
     canvas.drawCircle(center, outerCircleRadius * size.width, outerPaint);

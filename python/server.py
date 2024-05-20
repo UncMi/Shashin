@@ -7,7 +7,6 @@ import requests
 from io import BytesIO
 from flask import Flask, request, jsonify, send_from_directory
 import numpy as np
-import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 
@@ -56,7 +55,6 @@ async def upload_file():
         rotated_filepath = os.path.join(UPLOAD_FOLDER, rotated_filename)
         rotated_image.save(rotated_filepath)
 
-        # Crop the rotated image to maintain a square shape
         min_dimension = min(rotated_image.width, rotated_image.height)
         left = (rotated_image.width - min_dimension) / 2
         top = (rotated_image.height - min_dimension) / 2
@@ -64,20 +62,24 @@ async def upload_file():
         bottom = top + min_dimension
         cropped_rotated_image = rotated_image.crop((left, top, right, bottom))
 
-        # Save the cropped rotated image
         cropped_rotated_filename = 'cropped_rotated_' + filename
         cropped_rotated_filepath = os.path.join(UPLOAD_FOLDER, cropped_rotated_filename)
         cropped_rotated_image.save(cropped_rotated_filepath)
 
-        # Resize the cropped rotated image to have the desired dimensions (1:1 aspect ratio)
         resized_image = cropped_rotated_image.resize((img_width, img_width))
-        image_np = np.array(resized_image)
+        # image_np = np.array(resized_image)
+        # image_np = image_np.reshape((1, img_width, img_width, 3))
+
+        
+
+        reduced_quality_filepath = os.path.join(UPLOAD_FOLDER, f"reduced_quality_{filename}")
+        reduced_quality_image = resized_image.copy()
+        reduced_quality_image.save(reduced_quality_filepath, quality=90)
+
+        image_np = np.array(reduced_quality_image)
         image_np = image_np.reshape((1, img_width, img_width, 3))
 
-       # Save the NumPy array
         np.save(os.path.join(UPLOAD_FOLDER, f"image_np_{next_index}.npy"), image_np)
-
-        loaded_image_np = np.load(os.path.join(UPLOAD_FOLDER, "image_np_13.npy"))
 
         predictions = await send_to_model(image_np)
         predicted_class = class_names[np.argmax(predictions['predictions'][0])]
@@ -89,6 +91,7 @@ async def upload_file():
         return jsonify({
             "message": "File uploaded successfully",
             "filename": cropped_rotated_filename,
+            "reduced_quality_filename": f"reduced_quality_{filename}",
             "predicted_class": predicted_class,
             "coin_info": coin_info
         }), 200
