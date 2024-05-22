@@ -1,6 +1,5 @@
-Flask==2.0.3
-flask-async==0.4.0
-Pillow==9.1.0
+Quart==0.16.2
 aiohttp==3.8.1
+Pillow==9.1.0
 requests==2.27.1
 numpy==1.22.3
