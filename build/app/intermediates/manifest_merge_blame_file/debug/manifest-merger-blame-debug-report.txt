@@ -27,7 +27,7 @@
 21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 21-->[androidx.core:core:1.6.0] C:\Users\nyanca\.gradle\caches\transforms-3\d08c73bfb05384f2e52578171dbd141e\transformed\core-1.6.0\AndroidManifest.xml:24:18-86
 22        android:debuggable="true"
-23        android:icon="@mipmap/ic_launcher"
+23        android:icon="@mipmap/launcher_icon"
 24        android:label="shashin" >
 25        <activity
 26            android:name="com.example.shashin.MainActivity"

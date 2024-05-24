@@ -77,7 +77,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                           width: 0.7 * MediaQuery.of(context).size.width,
                           height: 0.7 * MediaQuery.of(context).size.width,
                           child: Transform.translate(
-                            offset: Offset(0, 0),  
+                            offset: Offset(0, 0),
                             child: Image.file(
                               File(widget.file.path),
                               fit: BoxFit.cover,
@@ -100,7 +100,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.transparent,
+                                backgroundColor: Colors.transparent,
                               ),
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -127,15 +127,15 @@ class _ImagePreviewState extends State<ImagePreview> {
                                   Navigator.pop(context, 1);
                                 } else if (SharedData.cameraState == 1) {
                                   SharedPhoto.photo2 = widget.file;
-                                   Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => InfoRoute(),
-                                    ));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => InfoRoute(),
+                                      ));
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.transparent,
+                                backgroundColor: Colors.transparent,
                               ),
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

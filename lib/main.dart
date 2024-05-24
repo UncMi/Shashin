@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:shashin/screen.dart';
 
-
 class SharedPhoto {
   static XFile photo1 = XFile('assets/placeholder.png');
   static XFile photo2 = XFile('assets/placeholder.png');
@@ -21,7 +20,6 @@ class SharedData {
     _cameraState = newState;
   }
 }
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +53,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
-        
+
         backgroundColor: Color.fromARGB(255, 76, 88, 87),
         body: Column(
           // on top of each other
@@ -74,7 +72,7 @@ class HomeScreen extends StatelessWidget {
                       ));
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
+                  backgroundColor: Colors.transparent,
                 ),
                 child: const Row(
                   children: [
@@ -105,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                       ));
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
+                  backgroundColor: Colors.transparent,
                 ),
                 child: const Row(
                   children: [
@@ -131,7 +129,7 @@ class HomeScreen extends StatelessWidget {
                   print("Another button pressed");
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
+                  backgroundColor: Colors.transparent,
                 ),
                 child: const Row(
                   children: [
@@ -155,7 +153,7 @@ class HomeScreen extends StatelessWidget {
                   print("Another button pressed");
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
+                  backgroundColor: Colors.transparent,
                 ),
                 child: const Row(
                   children: [
@@ -211,7 +209,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-
 class CameraRoute extends StatefulWidget {
   const CameraRoute({super.key});
 
@@ -260,7 +257,7 @@ class _CameraRouteState extends State<CameraRoute> {
             ),
           ),
         ),
-        if ( SharedData._cameraState == 0)
+        if (SharedData._cameraState == 0)
           Positioned(
             top: 120,
             left: 0,
@@ -301,7 +298,6 @@ class _CameraRouteState extends State<CameraRoute> {
               SharedData._cameraState = 0;
             },
             child: Icon(Icons.arrow_back),
-            
           ),
         ),
         Column(
@@ -321,7 +317,7 @@ class _CameraRouteState extends State<CameraRoute> {
                       }
 
                       try {
-                        await _controller.setFlashMode(FlashMode.auto);
+                        await _controller.setFlashMode(FlashMode.off);
                         XFile file = await _controller.takePicture();
                         print("AAAAAAAAAAAAAAA");
                         SharedData._cameraState = await _navigateToNextScreen(

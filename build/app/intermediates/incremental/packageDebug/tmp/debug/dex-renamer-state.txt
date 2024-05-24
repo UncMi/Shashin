@@ -1,4 +1,4 @@
-#Sun May 19 17:27:00 TRT 2024
+#Fri May 24 21:07:25 TRT 2024
 base.0=C\:\\GithubRepositories\\Shashin\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\GithubRepositories\\Shashin\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
 base.2=C\:\\GithubRepositories\\Shashin\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
