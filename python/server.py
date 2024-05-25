@@ -38,6 +38,9 @@ def get_next_index():
         return max(indexes) + 1
     else:
         return 1
+    
+
+print("heheheha!")
 
 @app.route('/upload', methods=['POST'])
 async def upload_file():
