@@ -1,13 +1,14 @@
 import os
 import json
 import asyncio
-from quart import Quart, request, jsonify, send_from_directory
 from aiohttp import ClientSession
 from PIL import Image
+import requests
+from io import BytesIO
+from flask import Flask, request, jsonify, send_from_directory
 import numpy as np
-import io
 
-app = Quart(__name__)
+app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'
 if not os.path.exists(UPLOAD_FOLDER):
@@ -33,16 +34,16 @@ def get_next_index():
 
 @app.route('/upload', methods=['POST'])
 async def upload_file():
-    if 'file' not in (await request.files):
+    if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
-    file = (await request.files)['file']
+    file = request.files['file']
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
     if file:
         next_index = get_next_index()
         filename = f'image_{next_index}_1.jpg'
         filepath = os.path.join(UPLOAD_FOLDER, filename)
-        await file.save(filepath)
+        file.save(filepath)
 
         print(f"Image received: {filename}")
 
@@ -66,6 +67,10 @@ async def upload_file():
         cropped_rotated_image.save(cropped_rotated_filepath)
 
         resized_image = cropped_rotated_image.resize((img_width, img_width))
+        # image_np = np.array(resized_image)
+        # image_np = image_np.reshape((1, img_width, img_width, 3))
+
+        
 
         reduced_quality_filepath = os.path.join(UPLOAD_FOLDER, f"reduced_quality_{filename}")
         reduced_quality_image = resized_image.copy()
@@ -80,10 +85,7 @@ async def upload_file():
         predicted_class = class_names[np.argmax(predictions['predictions'][0])]
 
         key = predicted_class[:-1]
-        async with ClientSession() as session:
-            async with session.get(f"https://coinrecognition.onrender.com/get_info/{key}") as resp:
-                coin_info = await resp.json()
-
+        coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info/{key}").json()
         print(coin_info)
 
         return jsonify({
@@ -95,8 +97,8 @@ async def upload_file():
         }), 200
 
 @app.route('/uploads/<filename>')
-async def uploaded_file(filename):
-    return await send_from_directory(UPLOAD_FOLDER, filename)
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, host='0.0.0.0')
