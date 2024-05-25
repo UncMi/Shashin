@@ -63,6 +63,11 @@ async def upload_file():
         img_height, img_width = 256, 256
         image = Image.open(filepath)
 
+        with open(filepath, "rb") as f:
+            response = requests.post("https://coinrecognition.onrender.com/preprocess_image/", files={"file": f})
+
+        image = Image.open(BytesIO(response.content))
+
         rotated_image = image.rotate(-90, expand=True)
         rotated_filename = 'rotated_' + filename
         rotated_filepath = os.path.join(UPLOAD_FOLDER, rotated_filename)
@@ -90,6 +95,7 @@ async def upload_file():
 
         np.save(os.path.join(UPLOAD_FOLDER, f"image_np_{next_index}.npy"), image_np)
 
+        
         predictions = await send_to_model(image_np)
         predicted_class = class_names[np.argmax(predictions['predictions'][0])]
 
