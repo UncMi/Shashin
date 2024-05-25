@@ -8,11 +8,16 @@ from io import BytesIO
 from quart import Quart, request, jsonify, send_from_directory
 from quart_cors import cors
 import numpy as np
+import aiofiles
 
 app = Quart(__name__)
 app = cors(app)
 
-UPLOAD_FOLDER = 'uploads'
+# Get the directory of the current script
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Specify the path to the uploads folder relative to the script directory
+UPLOAD_FOLDER = os.path.join(current_directory, 'uploads')
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
@@ -38,14 +43,16 @@ def get_next_index():
 async def upload_file():
     if 'file' not in (await request.files):
         return jsonify({"error": "No file part"}), 400
+    
     file = (await request.files)['file']
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
+    
     if file:
         next_index = get_next_index()
         filename = f'image_{next_index}_1.jpg'
         filepath = os.path.join(UPLOAD_FOLDER, filename)
-        file.save(filepath)
+        await file.save(filepath)
 
         print(f"Image received: {filename}")
 
@@ -99,4 +106,4 @@ async def uploaded_file(filename):
     return await send_from_directory(UPLOAD_FOLDER, filename)
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=False, host='0.0.0.0')
+    app.run(debug=True, use_reloader=False, host='0.0.0.0', port=5000)
