@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 
 import 'package:shashin/main.dart';
 
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class InfoRoute extends StatefulWidget {
   const InfoRoute({Key? key}) : super(key: key);
@@ -17,7 +20,7 @@ class InfoRoute extends StatefulWidget {
 
 Future<void> uploadImage(File imageFile, BuildContext context) async {
   final url = Uri.parse('https://shashin-15.onrender.com/upload');  
-  //final url = Uri.parse('http://192.168.1.112:5000/upload');// Ensure URL is updated
+  //final url = Uri.parse('http://192.168.1.160:5000/upload');// Ensure URL is updated
   final request = http.MultipartRequest('POST', url);
   request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
 
@@ -206,15 +209,48 @@ class CoinInfoScreen extends StatefulWidget {
 }
 
 class _CoinInfoScreenState extends State<CoinInfoScreen> {
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    // Simulating loading delay
     Timer(const Duration(seconds: 2), () {
       setState(() {
         isLoading = false;
       });
     });
+  }
+
+  Future<void> saveCoinInfo() async {
+    final coinInfo = widget.data['coin_info'];
+    final prefs = await SharedPreferences.getInstance();
+    final directory = await getApplicationDocumentsDirectory();
+
+    // Save images
+    final photo1Path = '${directory.path}/photo1.png';
+    final photo2Path = '${directory.path}/photo2.png';
+
+    final photo1File = File(SharedPhoto.photo1.path);
+    final photo2File = File(SharedPhoto.photo2.path);
+
+    await photo1File.copy(photo1Path);
+    await photo2File.copy(photo2Path);
+
+    // Save coin info with images paths
+    final savedData = {
+      'coin_info': coinInfo,
+      'photo1': photo1Path,
+      'photo2': photo2Path,
+    };
+
+    final savedList = prefs.getStringList('coin_history') ?? [];
+    savedList.add(jsonEncode(savedData));
+
+    await prefs.setStringList('coin_history', savedList);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Coin info saved successfully!')),
+    );
   }
 
   @override
@@ -346,32 +382,56 @@ class _CoinInfoScreenState extends State<CoinInfoScreen> {
                           ),
                         ),
                       const SizedBox(height: 40),
-                      ElevatedButton(
-                        onPressed: () {
-                          SharedData.cameraState = 0;
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.transparent,
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.camera,
-                              color: Colors.white,
-                              size: 36,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              SharedData.cameraState = 0;
+                              Navigator.of(context).popUntil((route) => route.isFirst);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.transparent,
                             ),
-                            const SizedBox(
-                                width: 8), // Add space between icon and text
-                            Text(
-                              "Return To Main Page",
-                              style: TextStyle(color: Colors.white),
-                              // Text with white color
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.camera,
+                                  color: Colors.white,
+                                  size: 36,
+                                ),
+                                SizedBox(width: 8), // Add space between icon and text
+                                Text(
+                                  "Main Page",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton(
+                            onPressed: saveCoinInfo,
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.transparent,
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.save,
+                                  color: Colors.white,
+                                  size: 36,
+                                ),
+                                SizedBox(width: 8), // Add space between icon and text
+                                Text(
+                                  "Save",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

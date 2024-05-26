@@ -17,6 +17,7 @@ INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest
 INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml:1:1-33:12
 INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml:1:1-33:12
 MERGED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml:1:1-33:12
+MERGED from [:shared_preferences_android] C:\GithubRepositories\Shashin\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:camera_android] C:\GithubRepositories\Shashin\build\camera_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-12:12
 MERGED from [:flutter_plugin_android_lifecycle] C:\GithubRepositories\Shashin\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:path_provider_android] C:\GithubRepositories\Shashin\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
@@ -58,6 +59,8 @@ uses-sdk
 INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml
 INJECTED from C:\GithubRepositories\Shashin\android\app\src\main\AndroidManifest.xml
+MERGED from [:shared_preferences_android] C:\GithubRepositories\Shashin\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:shared_preferences_android] C:\GithubRepositories\Shashin\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:camera_android] C:\GithubRepositories\Shashin\build\camera_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:camera_android] C:\GithubRepositories\Shashin\build\camera_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_plugin_android_lifecycle] C:\GithubRepositories\Shashin\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
