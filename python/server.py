@@ -97,7 +97,7 @@ async def upload_file():
 
         
         predictions = await send_to_model(image_np)
-        predicted_class = class_names[np.argmax(predictions['predictions'][0])]
+        predicted_class = class_names[np.argmax(predictions['predictions'][0])] 
 
         key = predicted_class[:-1]
         coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info/{key}").json()
