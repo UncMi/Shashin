@@ -53,8 +53,8 @@ async def upload_file():
         return jsonify({"error": "No selected file"}), 400
     
     if file:
-        next_index = get_next_index()
-        filename = f'image_{next_index}_1.jpg'
+        # Save the uploaded file with a fixed filename
+        filename = 'image.jpg'
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         await file.save(filepath)
 
@@ -62,11 +62,6 @@ async def upload_file():
 
         img_height, img_width = 256, 256
         image = Image.open(filepath)
-
-        with open(filepath, "rb") as f:
-            response = requests.post("https://coinrecognition.onrender.com/preprocess_image/", files={"file": f})
-
-        image = Image.open(BytesIO(response.content))
 
         rotated_image = image.rotate(-90, expand=True)
         rotated_filename = 'rotated_' + filename
@@ -90,14 +85,18 @@ async def upload_file():
         reduced_quality_image = resized_image.copy()
         reduced_quality_image.save(reduced_quality_filepath, quality=90)
 
-        image_np = np.array(reduced_quality_image)
+        with open(reduced_quality_filepath, "rb") as f:
+            response = requests.post("https://coinrecognition.onrender.com/preprocess_image/", files={"file": f})
+
+        final_image = Image.open(BytesIO(response.content))
+
+        image_np = np.array(final_image)
         image_np = image_np.reshape((1, img_width, img_width, 3))
 
-        np.save(os.path.join(UPLOAD_FOLDER, f"image_np_{next_index}.npy"), image_np)
+        np.save(os.path.join(UPLOAD_FOLDER, "image_np.npy"), image_np)
 
-        
         predictions = await send_to_model(image_np)
-        predicted_class = class_names[np.argmax(predictions['predictions'][0])] 
+        predicted_class = class_names[np.argmax(predictions['predictions'][0])]
 
         key = predicted_class[:-1]
         coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info/{key}").json()
@@ -110,6 +109,7 @@ async def upload_file():
             "predicted_class": predicted_class,
             "coin_info": coin_info
         }), 200
+
 
 @app.route('/uploads/<filename>')
 async def uploaded_file(filename):
