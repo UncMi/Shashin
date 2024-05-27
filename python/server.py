@@ -150,7 +150,7 @@ async def send_to_model(image_np):
     data = json.dumps({"signature_name": "serving_default", "instances": image_np.tolist()})
     headers = {"content-type": "application/json"}
     async with ClientSession() as session:
-        async with session.post('https://petite-humans-arrive.loca.lt/v1/models/concat_coin_model:predict', data=data, headers=headers) as response:
+        async with session.post('https://concat-model-latest.onrender.com/v1/models/concat_coin_model:predict', data=data, headers=headers) as response:
             return await response.json()
 
 def img_encode(image):
@@ -261,7 +261,7 @@ async def upload_files():
             
         else:
             key = concat_class_names[np.argmax(predictions['predictions'][0])]
-            coin_info = requests.get(f"https://vast-planets-reply.loca.lt/get_info_concat/{key}").json()
+            coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info_concat/{key}").json()
 
         # predicted_class = concat_class_names[np.argmax(predictions[0])]
 
@@ -337,7 +337,7 @@ async def gallery_send_to_model(image_np):
     data = json.dumps({"signature_name": "serving_default", "instances": image_np.tolist()})
     headers = {"content-type": "application/json"}
     async with ClientSession() as session:
-        async with session.post('https://gold-pants-unite.loca.lt/v1/models/coin_model:predict', data=data, headers=headers) as response:
+        async with session.post('https://coin-model-7ynk.onrender.com/v1/models/coin_model:predict', data=data, headers=headers) as response:
             return await response.json()
 
 
@@ -437,7 +437,7 @@ async def upload_file():
             
         else:
             key = class_names[np.argmax(predictions['predictions'][0])]
-            coin_info = requests.get(f"https://vast-planets-reply.loca.lt/get_info/{key}").json()
+            coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info/{key}").json()
 
 
         
