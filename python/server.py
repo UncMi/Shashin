@@ -150,7 +150,7 @@ async def send_to_model(image_np):
     data = json.dumps({"signature_name": "serving_default", "instances": image_np.tolist()})
     headers = {"content-type": "application/json"}
     async with ClientSession() as session:
-        async with session.post('https://https://petite-humans-arrive.loca.lt/v1/models/concat_coin_model:predict', data=data, headers=headers) as response:
+        async with session.post('https://petite-humans-arrive.loca.lt/v1/models/concat_coin_model:predict', data=data, headers=headers) as response:
             return await response.json()
 
 def img_encode(image):
