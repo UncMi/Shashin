@@ -227,12 +227,45 @@ async def upload_files():
         np_file_path = os.path.join(UPLOAD_FOLDER, 'concatenated_image.npy')
         np.save(np_file_path, concat_image_np)
 
+        print ("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
         predictions = await send_to_model(concat_image_np)
-        predicted_class = concat_class_names[np.argmax(predictions['predictions'][0])]
+        print ("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        print (predictions['predictions'][0])
+        if max(predictions['predictions'][0]) < 0.5:
+            top_3_indices = np.argpartition(predictions['predictions'][0], -3)[-3:][::-1]
+            key1 = "KM# " + class_names[top_3_indices[0]]
+            key2 = "KM# " + class_names[top_3_indices[1]]
+            key3 = "KM# " + class_names[top_3_indices[2]]
+            
+            coin_info = {
+            "Number": "",
+            "Country": "",
+            "Period": "Couldn't identify the coin.",
+            "Coin type": "",
+            "Denomination": "Top 3 matches are given.",
+            "Currency rate": "",
+            "Year": "",
+            "Composition": "",
+            "Edge type": "",
+            "Edge description": "",
+            "Shape": "",
+            "Alignment": "",
+            "Weight (g)": "",
+            "Diameter (mm)": "",
+            "Thickness (mm)": ""
+            }
+            
+            coin_info["Number"] = key1 + ", " + key2 + ", " + key3
+            
 
-        key = concat_class_names[np.argmax(predictions['predictions'][0])]
-        
-        coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info_concat/{key}").json()
+            
+        else:
+            key = concat_class_names[np.argmax(predictions['predictions'][0])]
+            coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info_concat/{key}").json()
+
+        # predicted_class = concat_class_names[np.argmax(predictions[0])]
+
+
         print(coin_info)
 
         # Define filenames here
@@ -244,7 +277,7 @@ async def upload_files():
             "filename": cropped_rotated_filename,
             "reduced_quality_filename": f"reduced_quality_{filename1}",
             "final_image_filename": final_image_filename,
-            "predicted_class": predicted_class,
+            #"predicted_class": predicted_class,
             "coin_info": coin_info
         }), 200
 
@@ -373,19 +406,50 @@ async def upload_file():
         np.save(os.path.join(UPLOAD_FOLDER, "image_np.npy"), image_np)
 
         predictions = await gallery_send_to_model(image_np)
-        predicted_class = class_names[np.argmax(predictions['predictions'][0])]
+        
+        if max(predictions['predictions'][0]) < 0.5:
+            top_3_indices = np.argpartition(predictions['predictions'][0], -3)[-3:][::-1]
+            key1 = "KM# " + class_names[top_3_indices[0]]
+            key2 = "KM# " + class_names[top_3_indices[1]]
+            key3 = "KM# " + class_names[top_3_indices[2]]
+            
+            coin_info = {
+            "Number": "",
+            "Country": "",
+            "Period": "Couldn't identify the coin.",
+            "Coin type": "",
+            "Denomination": "Top 3 matches are given.",
+            "Currency rate": "",
+            "Year": "",
+            "Composition": "",
+            "Edge type": "",
+            "Edge description": "",
+            "Shape": "",
+            "Alignment": "",
+            "Weight (g)": "",
+            "Diameter (mm)": "",
+            "Thickness (mm)": ""
+            }
+            
+            coin_info["Number"] = key1 + ", " + key2 + ", " + key3
+            
 
-        key = predicted_class
+            
+        else:
+            key = class_names[np.argmax(predictions['predictions'][0])]
+            coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info/{key}").json()
 
-        coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info/{key}").json()
+
+        
+
         print(coin_info)
+        
 
         return jsonify({
             "message": "File uploaded successfully",
             "filename": cropped_rotated_filename,
             "reduced_quality_filename": f"reduced_quality_{filename}",
             "final_image_filename": final_image_filename,
-            "predicted_class": predicted_class,
             "coin_info": coin_info
         }), 200
 
