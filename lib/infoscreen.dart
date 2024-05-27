@@ -19,7 +19,7 @@ class InfoRoute extends StatefulWidget {
 }
 
 Future<void> uploadImage(File imageFile, BuildContext context) async {
-  final url = Uri.parse('https://shashin-15.onrender.com/upload');  
+  final url = Uri.parse('https://shashin-15-zhte.onrender.com/upload');  
   //final url = Uri.parse('http://192.168.1.160:5000/upload');// Ensure URL is updated
   final request = http.MultipartRequest('POST', url);
   request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
