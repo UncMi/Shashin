@@ -41,6 +41,7 @@ dependencies:
   image: ^4.0.15
   process_run: ^0.12.0
   shared_preferences: ^2.0.15
+  image_picker: ^0.8.4+2
 
 dev_dependencies:
   flutter_test:

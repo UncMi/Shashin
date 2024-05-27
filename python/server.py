@@ -89,6 +89,7 @@ def pre_preprocess_image(image, img_width, filename):
 
     return reduced_quality_image
 
+
 def preprocess_image(image, output_filename):
     offset = 1
     param2Value = 110
@@ -156,8 +157,15 @@ def img_encode(image):
     _, img_encoded = cv2.imencode('.jpg', image)
     return img_encoded.tobytes()
 
+
+
+
+
+
+
+
 @app.route('/upload', methods=['POST'])
-async def upload_file():
+async def upload_files():
     if 'file' not in (await request.files) or 'file2' not in (await request.files):
         return jsonify({"error": "Missing one or more image files"}), 400
     
@@ -239,6 +247,148 @@ async def upload_file():
             "predicted_class": predicted_class,
             "coin_info": coin_info
         }), 200
+
+    return jsonify({"error": "Invalid request"}), 400
+
+
+
+
+
+
+
+def gallery_preprocess_image(image):
+    offset = 1
+    param2Value = 110
+    param2Change = 7
+
+    # Convert PIL image to numpy array
+    image_np = np.array(image)
+
+    image1 = cv2.cvtColor(image_np, cv2.COLOR_RGB2GRAY)
+    image1 = cv2.blur(image1, (7, 7))
+    orgGray = np.array(image1, copy=True)
+
+    height, width = image_np.shape[:2]
+    circles = None
+    while (circles is None) and (param2Value > 50):
+        image1 = np.array(orgGray, copy=True)
+        circles = cv2.HoughCircles(image1, cv2.HOUGH_GRADIENT, 1, 40,
+                                   param1=60, param2=param2Value, minRadius=0, maxRadius=0)
+        param2Value -= param2Change
+
+    if circles is not None:
+        original = np.array(circles, copy=True)
+        circles = np.uint16(np.around(circles))
+        mask = np.zeros_like(image1)
+
+        maxCircle = max(circles[0, :], key=lambda x: x[2])
+        radius = int(maxCircle[2] * offset)
+        cv2.circle(mask, (maxCircle[0], maxCircle[1]), radius, (255, 255, 255), thickness=-1)
+
+        top = int(maxCircle[1] - radius)
+        bottom = int(maxCircle[1] + radius)
+        left = int(maxCircle[0] - radius)
+        right = int(maxCircle[0] + radius)
+
+        result = cv2.bitwise_and(image_np, image_np, mask=mask)
+        isolated = result[top:bottom, left:right]
+
+        isolated = cv2.resize(isolated, (256, 256))
+
+        return isolated
+    else:
+        return None
+    
+
+async def gallery_send_to_model(image_np):
+    data = json.dumps({"signature_name": "serving_default", "instances": image_np.tolist()})
+    headers = {"content-type": "application/json"}
+    async with ClientSession() as session:
+        async with session.post('https://coin-model-7ynk.onrender.com/v1/models/coin_model:predict', data=data, headers=headers) as response:
+            return await response.json()
+
+
+
+
+
+@app.route('/gallery-upload', methods=['POST'])
+async def upload_file():
+    if 'file' not in (await request.files):
+        return jsonify({"error": "No file part"}), 400
+    
+    file = (await request.files)['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+    
+    if file:
+        filename = 'image.jpg'
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+        await file.save(filepath)
+
+        try:
+            image = Image.open(filepath)
+        except UnidentifiedImageError:
+            return jsonify({"error": "Cannot identify image file"}), 400
+
+        print(f"Image received: {filename}")
+
+        img_height, img_width = 256, 256
+
+        rotated_image = image.rotate(-90, expand=True)
+        rotated_filename = 'rotated_' + filename
+        rotated_filepath = os.path.join(UPLOAD_FOLDER, rotated_filename)
+        rotated_image.save(rotated_filepath)
+
+        min_dimension = min(rotated_image.width, rotated_image.height)
+        left = (rotated_image.width - min_dimension) / 2
+        top = (rotated_image.height - min_dimension) / 2
+        right = left + min_dimension
+        bottom = top + min_dimension
+        cropped_rotated_image = rotated_image.crop((left, top, right, bottom))
+
+        cropped_rotated_filename = 'cropped_rotated_' + filename
+        cropped_rotated_filepath = os.path.join(UPLOAD_FOLDER, cropped_rotated_filename)
+        cropped_rotated_image.save(cropped_rotated_filepath)
+
+        resized_image = cropped_rotated_image.resize((img_width, img_width))
+
+        reduced_quality_filepath = os.path.join(UPLOAD_FOLDER, f"reduced_quality_{filename}")
+        reduced_quality_image = resized_image.copy()
+        reduced_quality_image.save(reduced_quality_filepath, quality=90)
+
+        final_image = gallery_preprocess_image(reduced_quality_image)
+
+        if final_image is None:
+            return jsonify({"error": "Failed to preprocess image"}), 500
+
+        final_image_filename = f"final_{filename}"
+        final_image_filepath = os.path.join(UPLOAD_FOLDER, final_image_filename)
+
+        # Save the final preprocessed image
+        cv2.imwrite(final_image_filepath, cv2.cvtColor(final_image, cv2.COLOR_RGB2BGR))
+
+        image_np = np.array(final_image)
+        image_np = image_np.reshape((1, img_width, img_width, 3))
+
+        np.save(os.path.join(UPLOAD_FOLDER, "image_np.npy"), image_np)
+
+        predictions = await gallery_send_to_model(image_np)
+        predicted_class = class_names[np.argmax(predictions['predictions'][0])]
+
+        key = predicted_class
+
+        coin_info = requests.get(f"https://coinrecognition.onrender.com/get_info/{key}").json()
+        print(coin_info)
+
+        return jsonify({
+            "message": "File uploaded successfully",
+            "filename": cropped_rotated_filename,
+            "reduced_quality_filename": f"reduced_quality_{filename}",
+            "final_image_filename": final_image_filename,
+            "predicted_class": predicted_class,
+            "coin_info": coin_info
+        }), 200
+
 
     return jsonify({"error": "Invalid request"}), 400
 

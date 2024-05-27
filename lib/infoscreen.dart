@@ -18,9 +18,10 @@ class InfoRoute extends StatefulWidget {
   State<InfoRoute> createState() => InfoRouteState();
 }
 
+
 Future<void> uploadImages(File imageFile1, File imageFile2, BuildContext context) async {
-  //final url = Uri.parse('https://shashin-15-zhte.onrender.com/upload');  
-  final url = Uri.parse('http://192.168.1.160:5000/upload'); // testing
+  final url = Uri.parse('https://shashin-15-zhte.onrender.com/upload');  
+  //final url = Uri.parse('http://192.168.1.160:5000/upload'); // testing
   final request = http.MultipartRequest('POST', url);
   
   request.files.add(await http.MultipartFile.fromPath('file', imageFile1.path));
@@ -223,36 +224,39 @@ class _CoinInfoScreenState extends State<CoinInfoScreen> {
   }
 
   Future<void> saveCoinInfo() async {
-    final coinInfo = widget.data['coin_info'];
-    final prefs = await SharedPreferences.getInstance();
-    final directory = await getApplicationDocumentsDirectory();
+  final coinInfo = widget.data['coin_info'];
+  final prefs = await SharedPreferences.getInstance();
+  final directory = await getApplicationDocumentsDirectory();
 
-    // Save images
-    final photo1Path = '${directory.path}/photo1.png';
-    final photo2Path = '${directory.path}/photo2.png';
+  // Create unique filenames using timestamps
+  final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+  final photo1Path = '${directory.path}/photo1_$timestamp.png';
+  final photo2Path = '${directory.path}/photo2_$timestamp.png';
 
-    final photo1File = File(SharedPhoto.photo1.path);
-    final photo2File = File(SharedPhoto.photo2.path);
+  final photo1File = File(SharedPhoto.photo1.path);
+  final photo2File = File(SharedPhoto.photo2.path);
 
-    await photo1File.copy(photo1Path);
-    await photo2File.copy(photo2Path);
+  await photo1File.copy(photo1Path);
+  await photo2File.copy(photo2Path);
 
-    // Save coin info with images paths
-    final savedData = {
-      'coin_info': coinInfo,
-      'photo1': photo1Path,
-      'photo2': photo2Path,
-    };
+  // Save coin info with images paths
+  final savedData = {
+    'coin_info': coinInfo,
+    'photo1': photo1Path,
+    'photo2': photo2Path,
+  };
 
-    final savedList = prefs.getStringList('coin_history') ?? [];
-    savedList.add(jsonEncode(savedData));
+  final savedList = prefs.getStringList('coin_history') ?? [];
+  savedList.add(jsonEncode(savedData));
 
-    await prefs.setStringList('coin_history', savedList);
+  await prefs.setStringList('coin_history', savedList);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Coin info saved successfully!')),
-    );
-  }
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Coin info saved successfully!')),
+  );
+}
+
+
 
   @override
   Widget build(BuildContext context) {

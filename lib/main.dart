@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:shashin/gallery.dart';
 import 'package:shashin/history.dart';
 import 'package:shashin/screen.dart';
 
@@ -96,12 +97,12 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  print("Camera button pressed");
-                  Navigator.push(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => CameraRoute(),
-                      ));
+                        builder: (_) => GalleryRoute(),
+                      ),
+                    );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
@@ -123,30 +124,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  print("Another button pressed");
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.list,
-                        color: Colors.white,
-                        size: 48), // Another Icon with white color
-                    SizedBox(width: 30), // Add space between icon and text
-                    Text(
-                      "Check Coin Database",
-                      style: TextStyle(
-                          color: Colors.white), // Text with white color
-                    ),
-                  ],
-                ),
-              ),
-            ),
+           
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
@@ -182,33 +160,7 @@ class HomeScreen extends StatelessWidget {
         //     onPressed: () {
         //       print("pressed!");
         //     }),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'coin gallery',
-            ),
-          ],
-          onTap: (int index) {
-            switch (index) {
-              case 0:
-                print("Home pressed");
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => HomeScreen(),
-                    ));
-                break;
-              case 1:
-                print("Coin Gallery pressed");
-                break;
-            }
-          },
-        ),
+        
       ),
     );
   }
