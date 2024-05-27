@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 46, 53, 52),
           title: const Text(
-            "Shashin",
+            "Coin ipml-yb",
             style: TextStyle(
               color: Colors.white,
             ),
