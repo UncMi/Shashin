@@ -18,11 +18,13 @@ class InfoRoute extends StatefulWidget {
   State<InfoRoute> createState() => InfoRouteState();
 }
 
-Future<void> uploadImage(File imageFile, BuildContext context) async {
+Future<void> uploadImages(File imageFile1, File imageFile2, BuildContext context) async {
   final url = Uri.parse('https://shashin-15-zhte.onrender.com/upload');  
-  //final url = Uri.parse('http://192.168.1.160:5000/upload');// Ensure URL is updated
+  //final url = Uri.parse('http://192.168.1.160:5000/upload'); // testing
   final request = http.MultipartRequest('POST', url);
-  request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+  
+  request.files.add(await http.MultipartFile.fromPath('file', imageFile1.path));
+  request.files.add(await http.MultipartFile.fromPath('file2', imageFile2.path));
 
   try {
     final response = await request.send().timeout(const Duration(seconds: 180));
@@ -34,7 +36,7 @@ Future<void> uploadImage(File imageFile, BuildContext context) async {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Image uploaded successfully'),
+          content: const Text('Images uploaded successfully'),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -71,6 +73,7 @@ Future<void> uploadImage(File imageFile, BuildContext context) async {
     );
   }
 }
+
 
 
 bool isLoading = false;
@@ -152,17 +155,15 @@ class InfoRouteState extends State<InfoRoute> {
               const SizedBox(width: 20),
               ElevatedButton(
                 onPressed: () async {
-                  print("Camera button pressed");
+                  print("Continue button pressed");
                   setState(() {
-                    isLoading =
-                        true; // Set isLoading to true when starting upload
+                    isLoading = true; // Set isLoading to true when starting upload
                   });
                   try {
-                    await uploadImage(File(SharedPhoto.photo1.path), context);
+                    await uploadImages(File(SharedPhoto.photo1.path), File(SharedPhoto.photo2.path), context);
                   } finally {
                     setState(() {
-                      isLoading =
-                          false; // Reset isLoading after upload finishes
+                      isLoading = false; // Reset isLoading after upload finishes
                     });
                   }
                 },
@@ -171,7 +172,7 @@ class InfoRouteState extends State<InfoRoute> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     Icon(
                       Icons.camera,
                       color: Colors.white,
@@ -190,14 +191,14 @@ class InfoRouteState extends State<InfoRoute> {
           if (isLoading)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
-              child:
-                  CircularProgressIndicator(), // Display progress indicator while isLoading is true
+              child: CircularProgressIndicator(), // Display progress indicator while isLoading is true
             ),
         ],
       ),
     );
   }
 }
+
 
 class CoinInfoScreen extends StatefulWidget {
   final Map<String, dynamic> data;

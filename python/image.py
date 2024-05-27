@@ -17,7 +17,7 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 
-loaded_image_np = np.load(os.path.join(UPLOAD_FOLDER, "image_np_14.npy"))
+loaded_image_np = np.load(os.path.join(UPLOAD_FOLDER, "concatenated_image.npy"))
 image_np = loaded_image_np.squeeze(axis=0)
 
 plt.imshow(image_np)
