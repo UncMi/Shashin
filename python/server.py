@@ -210,15 +210,10 @@ async def upload_file():
         concatenated_image_filepath = os.path.join(UPLOAD_FOLDER, concatenated_image_filename)
         cv2.imwrite(concatenated_image_filepath, cv2.cvtColor(concatenated_image_resized, cv2.COLOR_RGB2BGR))
     
-        img1_data, img2_data = split_images(concatenated_image_s)
-        preprocessed_img1 = preprocess_image(np.array(img1_data), "test1.jpg")
-        preprocessed_img2 = preprocess_image(np.array(img2_data), "test2.jpg")
-        concatenated_image = concat_images(Image.fromarray(cv2.cvtColor(preprocessed_img1, cv2.COLOR_BGR2RGB)),
-                                           Image.fromarray(cv2.cvtColor(preprocessed_img2, cv2.COLOR_BGR2RGB)))
         
         
 
-        concat_image_np = np.array(concatenated_image)
+        concat_image_np = np.array(concatenated_image_s)
         concat_image_np = concat_image_np.reshape((1, concat_img_height, concat_img_width, 3))
 
         np_file_path = os.path.join(UPLOAD_FOLDER, 'concatenated_image.npy')

@@ -269,7 +269,7 @@ class _CameraRouteState extends State<CameraRoute> {
             right: 0,
             child: Center(
               child: Text(
-                'Front Face Of The Coin',
+                'Front Face (Tails)',
                 style: TextStyle(
                   fontSize: 32.0,
                   fontWeight: FontWeight.bold,
@@ -285,7 +285,7 @@ class _CameraRouteState extends State<CameraRoute> {
             right: 0,
             child: Center(
               child: Text(
-                'Back Face Of The Coin',
+                'Back Face (Heads)',
                 style: TextStyle(
                   fontSize: 32.0,
                   fontWeight: FontWeight.bold,

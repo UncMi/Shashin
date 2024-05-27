@@ -46,7 +46,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                           right: 0,
                           child: Center(
                             child: Text(
-                              'Front Face Of The Coin',
+                              'Front Face (tails)',
                               style: TextStyle(
                                 fontSize: 32.0,
                                 fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                           right: 0,
                           child: Center(
                             child: Text(
-                              'Back Face Of The Coin',
+                              'Back Face (heads)',
                               style: TextStyle(
                                 fontSize: 32.0,
                                 fontWeight: FontWeight.bold,
