@@ -106,7 +106,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
-                                    Icons.camera,
+                                    Icons.keyboard_return,
                                     color: Colors.white,
                                     size: 36,
                                   ),
