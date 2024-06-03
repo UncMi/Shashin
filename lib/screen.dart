@@ -40,7 +40,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                     children: [
                       SizedBox(height: 40),
                       if (SharedData.cameraState == 0)
-                        Positioned(
+                        const Positioned(
                           top: 120,
                           left: 0,
                           right: 0,
@@ -56,7 +56,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                           ),
                         ),
                       if (SharedData.cameraState == 1)
-                        Positioned(
+                        const Positioned(
                           top: 120,
                           left: 0,
                           right: 0,
