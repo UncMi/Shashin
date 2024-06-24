@@ -71,7 +71,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                             ),
                           ),
                         ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ClipOval(
                         child: Container(
                           width: 0.7 * MediaQuery.of(context).size.width,
@@ -118,7 +118,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                                 ],
                               ),
                             ),
-                            SizedBox(width: 40),
+                            const SizedBox(width: 40),
                             ElevatedButton(
                               onPressed: () {
                                 print("Camera button pressed");

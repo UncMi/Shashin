@@ -141,7 +141,7 @@ class InfoRouteState extends State<InfoRoute> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.camera,
+                      Icons.keyboard_return,
                       color: Colors.white,
                       size: 36,
                     ),

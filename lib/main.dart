@@ -83,11 +83,11 @@ class HomeScreen extends StatelessWidget {
                       color: Colors.white,
                       size: 48,
                     ),
-                    SizedBox(width: 30), // Add space between icon and text
+                    SizedBox(width: 30), 
                     Text(
                       "Take Coin Photo",
                       style: TextStyle(
-                          color: Colors.white), // Text with white color
+                          color: Colors.white),
                     ),
                   ],
                 ),
@@ -142,12 +142,12 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Icon(Icons.history,
                         color: Colors.white,
-                        size: 48), // Another Icon with white color
-                    SizedBox(width: 30), // Add space between icon and text
+                        size: 48),
+                    SizedBox(width: 30), 
                     Text(
                       "Your Coin History",
                       style: TextStyle(
-                          color: Colors.white), // Text with white color
+                          color: Colors.white),
                     ),
                   ],
                 ),
@@ -155,12 +155,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //     child: Icon(Icons.photo_library),
-        //     onPressed: () {
-        //       print("pressed!");
-        //     }),
-        
       ),
     );
   }
@@ -215,7 +209,7 @@ class _CameraRouteState extends State<CameraRoute> {
           ),
         ),
         if (SharedData._cameraState == 0)
-          Positioned(
+          const Positioned(
             top: 120,
             left: 0,
             right: 0,
@@ -231,7 +225,7 @@ class _CameraRouteState extends State<CameraRoute> {
             ),
           ),
         if (SharedData._cameraState == 1)
-          Positioned(
+          const Positioned(
             top: 120,
             left: 0,
             right: 0,
@@ -263,7 +257,7 @@ class _CameraRouteState extends State<CameraRoute> {
           children: [
             Center(
               child: Container(
-                margin: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
                 child: ElevatedButton(
                     onPressed: () async {
                       if (!_controller.value.isInitialized) {
